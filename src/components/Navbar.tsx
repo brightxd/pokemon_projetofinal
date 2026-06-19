@@ -8,6 +8,8 @@ export default function Navbar() {
   return (
     <nav className="navbar">
       <Link to="/" className="navbar-logo">Pokédex</Link>
+      <Link to='/Gen2' className='navbar-link'>Gen 2</Link>
+      <Link to='/Gen3' className="navbar-link">Gen 3</Link>
       <input
         className="navbar-search"
         type="text"
@@ -16,6 +18,7 @@ export default function Navbar() {
         onChange={(e) => setSearch(e.target.value)}
       />
       <Link to="/favorites" className="navbar-link">Favoritos</Link>
+      
     </nav>
   );
 }

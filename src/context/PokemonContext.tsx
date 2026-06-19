@@ -11,6 +11,7 @@ type PokemonContextType = {
   setSearch: (value: string) => void;
   setTypeFilter: (value: string) => void;
   toggleFavorite: (id: number) => void;
+  clearFavorite:() => void;
 };
 
 const PokemonContext = createContext<PokemonContextType>({} as PokemonContextType);
@@ -52,8 +53,12 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
     );
   }
 
+  function clearFavorite(){
+    setFavorites([]);
+  }
+
   return (
-    <PokemonContext.Provider value={{ pokemons, favorites, search, typeFilter, loading, setSearch, setTypeFilter, toggleFavorite }}>
+    <PokemonContext.Provider value={{ pokemons, favorites, search, typeFilter, loading, setSearch, setTypeFilter, toggleFavorite, clearFavorite }}>
       {children}
     </PokemonContext.Provider>
   );

@@ -22,3 +22,17 @@
   grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
   gap: 16px;
 }
+
+.clear-btn{
+  background: #cc0000;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  float: right;
+}
+
+.clear-btn:hover{
+  background: #aa0000;
+}

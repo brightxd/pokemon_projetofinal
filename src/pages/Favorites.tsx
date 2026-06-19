@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import "./Favorites.css";
 
 export default function Favorites() {
-  const { pokemons, favorites } = usePokemon();
+  const { pokemons, favorites, clearFavorite } = usePokemon();
 
   const favPokemons = pokemons.filter((p) => favorites.includes(p.id));
 
@@ -16,11 +16,16 @@ export default function Favorites() {
           Nenhum favorito ainda. <Link to="/">Explore a Pokédex!</Link>
         </p>
       ) : (
-        <div className="grid">
-          {favPokemons.map((pokemon) => (
-            <PokemonCard key={pokemon.id} pokemon={pokemon} />
-          ))}
-        </div>
+        <>
+          <button onClick={clearFavorite} className="clear-btn">
+            Limpar favoritos
+          </button>
+          <div className="grid">
+            {favPokemons.map((pokemon) => (
+              <PokemonCard key={pokemon.id} pokemon={pokemon} />
+            ))}
+          </div>
+        </>
       )}
     </main>
   );
