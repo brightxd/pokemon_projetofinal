@@ -1,12 +1,25 @@
 import { useParams, Link } from "react-router-dom";
 import { usePokemon } from "../context/PokemonContext";
+import { useState, useEffect } from "react";
 import "./Detail.css";
 
 export default function Detail() {
   const { id } = useParams<{ id: string }>();
   const { pokemons, favorites, toggleFavorite } = usePokemon();
 
-  const pokemon = pokemons.find((p) => p.id === Number(id));
+  const [pokemon, setPokemon] = useState(pokemons.find((p) => p.id === Number(id)) ?? null);
+
+
+  useEffect(() => {
+    if (pokemon) return;
+    fetch(`https://pokeapi.co/api/v2/pokemon/${id}`)
+      .then((r) => r.json())
+      .then((poke) => setPokemon({
+        id: poke.id,
+        name: poke.name,
+        types: poke.types.map((t: { type: { name: string } }) => t.type.name),
+      }));
+  }, [id]);
 
   if (!pokemon) {
     return <p className="loading">Pokémon não encontrado.</p>;
