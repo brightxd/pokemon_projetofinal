@@ -6,8 +6,10 @@ type PokemonContextType = {
   pokemons: Pokemon[];
   favorites: number[];
   search: string;
+  typeFilter: string;
   loading: boolean;
   setSearch: (value: string) => void;
+  setTypeFilter: (value: string) => void;
   toggleFavorite: (id: number) => void;
 };
 
@@ -17,6 +19,7 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
   const [favorites, setFavorites] = useState<number[]>([]);
   const [search, setSearch] = useState("");
+  const [typeFilter, setTypeFilter] = useState("");
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -50,7 +53,7 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <PokemonContext.Provider value={{ pokemons, favorites, search, loading, setSearch, toggleFavorite }}>
+    <PokemonContext.Provider value={{ pokemons, favorites, search, typeFilter, loading, setSearch, setTypeFilter, toggleFavorite }}>
       {children}
     </PokemonContext.Provider>
   );
