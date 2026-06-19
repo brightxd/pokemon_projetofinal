@@ -1,0 +1,24 @@
+.favorites {
+  padding: 24px;
+}
+
+.favorites-title {
+  font-size: 1.4rem;
+  margin-bottom: 16px;
+  color: #333;
+}
+
+.favorites-empty {
+  color: #666;
+  font-size: 1rem;
+}
+
+.favorites-empty a {
+  color: #cc0000;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+}
