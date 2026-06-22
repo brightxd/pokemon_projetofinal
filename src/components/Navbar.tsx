@@ -6,7 +6,7 @@ import converterNumerosRomanos from "../converterNumerosRomanos";
 import { TYPES } from "./TypeFilter";
 
 export default function Navbar() {
-  const { generations , search, setSearch, typeFilter, setTypeFilter } = usePokemon();
+  const { generations, search, setSearch, typeFilter, setTypeFilter, favorites } = usePokemon();
   
   return (
     <div>
@@ -57,7 +57,9 @@ export default function Navbar() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
-        <Link to="/favorites" className="navbar-link">Favoritos</Link>
+        <Link to="/favorites" className="navbar-link">
+          Favoritos {favorites.length > 0 && `(${favorites.length})`}
+        </Link>
         
       </nav>
     </div>
