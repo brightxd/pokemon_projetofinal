@@ -22,11 +22,6 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
 
   const { data: generation } = UseFetch<PokemonGenerationsResult>("https://pokeapi.co/api/v2/generation");
   const generations = generation?.results ?? [];
-  /* const generations = useMemo(() => {
-    console.log("Generations changed: ", generation);
-    
-  }, [generation]); */
-  
 
   useEffect(() => {
     if (generations.length === 0) return;
@@ -55,7 +50,6 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
       })
     );
 
-    //const sorted = results.toSorted((a, b) => a.id - b.id);
     setPokemons((prev) => {
       const existingIds = new Set(prev.map((p) => p.id));
       const novos = results.filter((p) => !existingIds.has(p.id));
