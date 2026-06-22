@@ -1,10 +1,13 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import type { Pokemon } from "../types/pokemon";
+import type { PokemonGenerations, PokemonGenerationsResult } from "../types/PokemonGenerationsResult";
+import UseFetch from "../hooks/UseFetch";
 
 type PokemonContextType = {
   pokemons: Pokemon[];
   favorites: number[];
+  generations: PokemonGenerations[];
   search: string;
   typeFilter: string;
   loading: boolean;
@@ -47,6 +50,10 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
     fetchPokemons();
   }, []);
 
+  const { data: generation } = UseFetch<PokemonGenerationsResult>("https://pokeapi.co/api/v2/generation")
+  
+  const generations = generation?.results ?? [];
+
   function toggleFavorite(id: number) {
     setFavorites((prev) =>
       prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]
@@ -58,7 +65,7 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <PokemonContext.Provider value={{ pokemons, favorites, search, typeFilter, loading, setSearch, setTypeFilter, toggleFavorite, clearFavorite }}>
+    <PokemonContext.Provider value={{ pokemons, generations, favorites, search, typeFilter, loading, setSearch, setTypeFilter, toggleFavorite, clearFavorite }}>
       {children}
     </PokemonContext.Provider>
   );

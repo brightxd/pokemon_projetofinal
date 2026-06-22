@@ -5,7 +5,7 @@ import Home from "./pages/Home";
 import Detail from "./pages/Detail";
 import Favorites from "./pages/Favorites";
 import "./App.css";
-import Gen2 from "./pages/Gen2";
+import Gen from "./pages/Gen";
 
 export default function App() {
   return (
@@ -16,7 +16,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/pokemon/:id" element={<Detail />} />
           <Route path="/favorites" element={<Favorites />} />
-          <Route path="/Gen2" element={<Gen2/>}></Route>
+          <Route path="/generation/:id" element={<Gen/>}></Route>
         </Routes>
       </BrowserRouter>
     </PokemonProvider>

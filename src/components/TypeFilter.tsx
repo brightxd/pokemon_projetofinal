@@ -30,3 +30,5 @@ export default function TypeFilter() {
     </div>
   );
 }
+
+export { TYPES };
