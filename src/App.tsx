@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { HashRouter, Routes, Route } from "react-router-dom";
 import { PokemonProvider } from "./context/PokemonContext";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
@@ -10,7 +10,7 @@ import Gen from "./pages/Gen";
 export default function App() {
   return (
     <PokemonProvider>
-      <BrowserRouter>
+      <HashRouter>
         <Navbar />
         <Routes>
           <Route path="/" element={<Home />} />
@@ -18,7 +18,7 @@ export default function App() {
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/generation/:id" element={<Gen/>}></Route>
         </Routes>
-      </BrowserRouter>
+      </HashRouter>
     </PokemonProvider>
   );
 }
