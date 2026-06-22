@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import type { Pokemon } from "../types/pokemon";
 import type { PokemonGenerations, PokemonGenerationsResult } from "../types/PokemonGenerationsResult";
 import type { PokemonGeneration } from "../types/PokemonGeneration";
-import UseFetch from "../hooks/UseFetch";
+import UseFetch from "../hooks/useFetch";
 
 type PokemonContextType = {
   pokemons: Pokemon[];

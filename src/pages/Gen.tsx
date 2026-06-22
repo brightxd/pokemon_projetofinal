@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import UseFetch from "../hooks/UseFetch";
+import UseFetch from "../hooks/useFetch";
 import type { Pokemon } from "../types/pokemon";
 import PokemonCard from "../components/PokemonCard";
 import type { PokemonGeneration } from "../types/PokemonGeneration";
@@ -19,7 +19,7 @@ export default function Gen() {
         if (!generationData) return;
         
         async function fetchGen() {
-            const urls: string[] = generationData?.pokemon_species.map(({url}) => url.replace('pokemon-species', 'pokemon')) ?? [];
+            const urls: string[] = generationData?.pokemon_species.map(({url}: {url: string}) => url.replace('pokemon-species', 'pokemon')) ?? [];
 
             async function fetchPokemon(url: string): Promise<Pokemon> {
                 const res = await fetch(url);
