@@ -2,6 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import type { Pokemon } from "../types/pokemon";
 import type { PokemonGenerations, PokemonGenerationsResult } from "../types/PokemonGenerationsResult";
+import type { PokemonGeneration } from "../types/PokemonGeneration";
 import UseFetch from "../hooks/useFetch";
 
 type PokemonContextType = {
@@ -11,11 +12,14 @@ type PokemonContextType = {
   search: string;
   typeFilter: string;
   loading: boolean;
+  loadingMore: boolean;
+  currentGenIndex: number;
   setSearch: (value: string) => void;
   setTypeFilter: (value: string) => void;
   toggleFavorite: (id: number) => void;
   clearFavorite: () => void;
   registerPokemons: (list: Pokemon[]) => void;
+  loadNextGeneration: () => void;
 };
 
 const PokemonContext = createContext<PokemonContextType>({} as PokemonContextType);
@@ -28,35 +32,56 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
   });
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [currentGenIndex, setCurrentGenIndex] = useState(0);
+
+  const { data: generation } = UseFetch<PokemonGenerationsResult>("https://pokeapi.co/api/v2/generation");
+  const generations = generation?.results ?? [];
 
   useEffect(() => {
-    async function fetchPokemons() {
-      const response = await fetch("https://pokeapi.co/api/v2/pokemon?limit=151");
-      const data = await response.json();
+    if (generations.length === 0) return;
+    loadGeneration(generations[0].url, true);
+  }, [generations]);
 
-      const detailed = await Promise.all(
-        data.results.map(async (item: { name: string; url: string }) => {
-          const res = await fetch(item.url);
-          const poke = await res.json();
-          return {
-            id: poke.id,
-            name: poke.name,
-            types: poke.types.map((t: { type: { name: string } }) => t.type.name),
-          } as Pokemon;
-        })
-      );
+  async function loadGeneration(url: string, isFirst: boolean) {
+    isFirst ? setLoading(true) : setLoadingMore(true);
 
-      setPokemons(detailed);
-      setLoading(false);
-    }
+    const res = await fetch(url);
+    const genData: PokemonGeneration = await res.json();
 
-    fetchPokemons();
-  }, []);
+    const urls = genData.pokemon_species.map(({ url }) =>
+      url.replace("pokemon-species", "pokemon")
+    );
 
-  const { data: generation } = UseFetch<PokemonGenerationsResult>("https://pokeapi.co/api/v2/generation")
-  
-  const generations = generation?.results ?? [];
+    const results = await Promise.all(
+      urls.map(async (u) => {
+        const r = await fetch(u);
+        const poke = await r.json();
+        return {
+          id: poke.id,
+          name: poke.name,
+          types: poke.types.map((t: { type: { name: string } }) => t.type.name),
+        } as Pokemon;
+      })
+    );
+
+    const sorted = results.sort((a, b) => a.id - b.id);
+    setPokemons((prev) => {
+      const existingIds = new Set(prev.map((p) => p.id));
+      const novos = sorted.filter((p) => !existingIds.has(p.id));
+      return [...prev, ...novos];
+    });
+
+    isFirst ? setLoading(false) : setLoadingMore(false);
+  }
+
+  function loadNextGeneration() {
+    const nextIndex = currentGenIndex + 1;
+    if (nextIndex >= generations.length) return;
+    setCurrentGenIndex(nextIndex);
+    loadGeneration(generations[nextIndex].url, false);
+  }
 
   function toggleFavorite(id: number) {
     setFavorites((prev) => {
@@ -66,7 +91,7 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
     });
   }
 
-  function clearFavorite(){
+  function clearFavorite() {
     setFavorites([]);
     localStorage.removeItem("favorites");
   }
@@ -80,7 +105,7 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
   }
 
   return (
-    <PokemonContext.Provider value={{ pokemons, generations, favorites, search, typeFilter, loading, setSearch, setTypeFilter, toggleFavorite, clearFavorite, registerPokemons }}>
+    <PokemonContext.Provider value={{ pokemons, generations, favorites, search, typeFilter, loading, loadingMore, currentGenIndex, setSearch, setTypeFilter, toggleFavorite, clearFavorite, registerPokemons, loadNextGeneration }}>
       {children}
     </PokemonContext.Provider>
   );
