@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import UseFetch from "../hooks/useFetch";
+import UseFetch from "../hooks/UseFetch";
 import type { Pokemon } from "../types/pokemon";
 import PokemonCard from "../components/PokemonCard";
 import type { PokemonGeneration } from "../types/PokemonGeneration";
@@ -9,7 +9,7 @@ import { usePokemon } from "../context/PokemonContext";
 export default function Gen() {
     const { id } = useParams();
 
-    const { search, typeFilter } = usePokemon();
+    const { search, typeFilter, registerPokemons } = usePokemon();
 
     const [pokemons, setPokemons] = useState<Pokemon[]>([]);
     
@@ -35,6 +35,7 @@ export default function Gen() {
             const results: Pokemon[] = await Promise.all(urls.map(fetchPokemon));
             const sorted = results.toSorted((a, b) => a.id - b.id);
             setPokemons(sorted);
+            registerPokemons(sorted);
         }
 
         fetchGen();

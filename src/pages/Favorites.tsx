@@ -6,7 +6,7 @@ import type { Pokemon } from "../types/pokemon";
 import "./Favorites.css";
 
 export default function Favorites() {
-  const { pokemons, favorites, clearFavorite } = usePokemon();
+  const { pokemons, favorites, clearFavorite, registerPokemons } = usePokemon();
   const [favPokemons, setFavPokemons] = useState<Pokemon[]>([]);
 
   useEffect(() => {
@@ -26,7 +26,8 @@ export default function Favorites() {
         })
       );
 
-      setFavPokemons([...resolved].sort((a, b) => a.id - b.id));
+      registerPokemons(resolved);
+      setFavPokemons(resolved);
     }
 
     if (favorites.length > 0) resolveFavorites();
