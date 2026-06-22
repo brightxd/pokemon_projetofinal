@@ -4,7 +4,8 @@ import type { Pokemon } from "../types/pokemon";
 import PokemonCard from "../components/PokemonCard";
 import type { PokemonGeneration } from "../types/PokemonGeneration";
 import { useEffect, useState } from "react";
-import { usePokemon } from "../context/PokemonContext";
+import { usePokemon } from "../hooks/usePokemon";
+import './Home.css';
 
 export default function Gen() {
     const { id } = useParams();
@@ -53,9 +54,12 @@ export default function Gen() {
         return (
             <main className="home">
                 <h2>Geração {id}</h2>
-                <div className="grid">
-                    {filtered.map((pokemon) => <PokemonCard key={pokemon.id} pokemon={pokemon} />)}
-                </div>
+                {filtered.length ? 
+                    <div className="grid">
+                    {filtered.map((pokemon) => <PokemonCard key={pokemon.id} pokemon={pokemon} />) }
+                    </div> : 
+                    <p>Não existem Pokemos do tipo {typeFilter} na geração {id}</p>
+                }
             </main>
         );
     }

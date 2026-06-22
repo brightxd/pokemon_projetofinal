@@ -1,10 +1,10 @@
 import { Link } from "react-router-dom";
 import type { Pokemon } from "../types/pokemon";
-import { usePokemon } from "../context/PokemonContext";
 import "./PokemonCard.css";
+import { usePokemon } from "../hooks/usePokemon";
 
 type Props = {
-  pokemon: Pokemon;
+  readonly pokemon: Pokemon;
 };
 
 export default function PokemonCard({ pokemon }: Props) {

@@ -1,4 +1,4 @@
-import { usePokemon } from "../context/PokemonContext";
+import { usePokemon } from "../hooks/usePokemon";
 import "./TypeFilter.css";
 
 const TYPES = [
