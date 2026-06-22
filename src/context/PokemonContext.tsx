@@ -2,7 +2,7 @@ import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import type { Pokemon } from "../types/pokemon";
 import type { PokemonGenerations, PokemonGenerationsResult } from "../types/PokemonGenerationsResult";
-import UseFetch from "../hooks/UseFetch";
+import UseFetch from "../hooks/useFetch";
 
 type PokemonContextType = {
   pokemons: Pokemon[];
@@ -21,7 +21,10 @@ const PokemonContext = createContext<PokemonContextType>({} as PokemonContextTyp
 
 export function PokemonProvider({ children }: { children: ReactNode }) {
   const [pokemons, setPokemons] = useState<Pokemon[]>([]);
-  const [favorites, setFavorites] = useState<number[]>([]);
+  const [favorites, setFavorites] = useState<number[]>(() => {
+    const stored = localStorage.getItem("favorites");
+    return stored ? JSON.parse(stored) : [];
+  });
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [loading, setLoading] = useState(true);
@@ -55,9 +58,11 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
   const generations = generation?.results ?? [];
 
   function toggleFavorite(id: number) {
-    setFavorites((prev) =>
-      prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id]
-    );
+    setFavorites((prev) => {
+      const updated = prev.includes(id) ? prev.filter((f) => f !== id) : [...prev, id];
+      localStorage.setItem("favorites", JSON.stringify(updated));
+      return updated;
+    });
   }
 
   function clearFavorite(){

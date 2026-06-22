@@ -1,5 +1,5 @@
 import { useParams } from "react-router-dom";
-import UseFetch from "../hooks/UseFetch";
+import UseFetch from "../hooks/useFetch";
 import type { Pokemon } from "../types/pokemon";
 import PokemonCard from "../components/PokemonCard";
 import type { PokemonGeneration } from "../types/PokemonGeneration";
