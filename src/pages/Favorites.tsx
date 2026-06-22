@@ -27,7 +27,7 @@ export default function Favorites() {
       );
 
       registerPokemons(resolved);
-      setFavPokemons(resolved);
+      setFavPokemons([...resolved].sort((a, b) => a.id - b.id));
     }
 
     if (favorites.length > 0) resolveFavorites();
