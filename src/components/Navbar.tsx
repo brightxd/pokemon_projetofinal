@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
-import { usePokemon } from "../context/PokemonContext";
 import "./Navbar.css";
 import type { PokemonGenerations } from "../types/PokemonGenerationsResult";
 import converterNumerosRomanos from "../converterNumerosRomanos";
 import { TYPES } from "./TypeFilter";
+import { usePokemon } from "../hooks/usePokemon";
 
 export default function Navbar() {
   const { generations, search, setSearch, typeFilter, setTypeFilter, favorites } = usePokemon();
@@ -17,7 +17,7 @@ export default function Navbar() {
             <span className="navbar-link dropdown-trigger">Generations </span>
             <ul className="dropdown-menu">
               {generations.map((generation: PokemonGenerations) => {
-                const id = generation.url.split('/').filter(Boolean).pop();
+                const id = generation.url.split('/').findLast(Boolean);
                 const generationName = converterNumerosRomanos(generation.name.split('-', 2)[1]);
                 return <li key={generation.name}>
                   <Link key={`${id}-${generation.name}`} to={`/generation/${id}`}>Generation {generationName}</Link>

@@ -1,7 +1,7 @@
 import { useParams, Link } from "react-router-dom";
-import { usePokemon } from "../context/PokemonContext";
 import { useState, useEffect } from "react";
 import "./Detail.css";
+import { usePokemon } from "../hooks/usePokemon";
 
 export default function Detail() {
   const { id } = useParams<{ id: string }>();

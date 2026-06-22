@@ -1,6 +1,6 @@
-import { usePokemon } from "../context/PokemonContext";
 import PokemonCard from "../components/PokemonCard";
 import converterNumerosRomanos from "../converterNumerosRomanos";
+import { usePokemon } from "../hooks/usePokemon";
 import "./Home.css";
 
 export default function Home() {

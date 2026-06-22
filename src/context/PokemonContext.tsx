@@ -1,26 +1,10 @@
-import { createContext, useContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
 import type { Pokemon } from "../types/pokemon";
-import type { PokemonGenerations, PokemonGenerationsResult } from "../types/PokemonGenerationsResult";
+import type { PokemonGenerationsResult } from "../types/PokemonGenerationsResult";
 import type { PokemonGeneration } from "../types/PokemonGeneration";
 import UseFetch from "../hooks/UseFetch";
-
-type PokemonContextType = {
-  pokemons: Pokemon[];
-  favorites: number[];
-  generations: PokemonGenerations[];
-  search: string;
-  typeFilter: string;
-  loading: boolean;
-  loadingMore: boolean;
-  currentGenIndex: number;
-  setSearch: (value: string) => void;
-  setTypeFilter: (value: string) => void;
-  toggleFavorite: (id: number) => void;
-  clearFavorite: () => void;
-  registerPokemons: (list: Pokemon[]) => void;
-  loadNextGeneration: () => void;
-};
+import type { PokemonContextType } from "../types/PokemonContextType";
 
 const PokemonContext = createContext<PokemonContextType>({} as PokemonContextType);
 
@@ -38,6 +22,11 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
 
   const { data: generation } = UseFetch<PokemonGenerationsResult>("https://pokeapi.co/api/v2/generation");
   const generations = generation?.results ?? [];
+  /* const generations = useMemo(() => {
+    console.log("Generations changed: ", generation);
+    
+  }, [generation]); */
+  
 
   useEffect(() => {
     if (generations.length === 0) return;
@@ -66,11 +55,11 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
       })
     );
 
-    const sorted = results.sort((a, b) => a.id - b.id);
+    //const sorted = results.toSorted((a, b) => a.id - b.id);
     setPokemons((prev) => {
       const existingIds = new Set(prev.map((p) => p.id));
-      const novos = sorted.filter((p) => !existingIds.has(p.id));
-      return [...prev, ...novos];
+      const novos = results.filter((p) => !existingIds.has(p.id));
+      return [...prev, ...novos].toSorted((a, b) => a.id - b.id);
     });
 
     if (isFirst) setLoading(false); else setLoadingMore(false);
@@ -111,6 +100,4 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
   );
 }
 
-export function usePokemon() {
-  return useContext(PokemonContext);
-}
+export { PokemonContext };
