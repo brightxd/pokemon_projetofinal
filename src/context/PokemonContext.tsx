@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import type { Pokemon } from "../types/pokemon";
 import type { PokemonGenerations, PokemonGenerationsResult } from "../types/PokemonGenerationsResult";
 import type { PokemonGeneration } from "../types/PokemonGeneration";
-import UseFetch from "../hooks/useFetch";
+import UseFetch from "../hooks/UseFetch";
 
 type PokemonContextType = {
   pokemons: Pokemon[];
@@ -45,7 +45,7 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
   }, [generations]);
 
   async function loadGeneration(url: string, isFirst: boolean) {
-    isFirst ? setLoading(true) : setLoadingMore(true);
+    if (isFirst) setLoading(true); else setLoadingMore(true);
 
     const res = await fetch(url);
     const genData: PokemonGeneration = await res.json();
@@ -73,7 +73,7 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
       return [...prev, ...novos];
     });
 
-    isFirst ? setLoading(false) : setLoadingMore(false);
+    if (isFirst) setLoading(false); else setLoadingMore(false);
   }
 
   function loadNextGeneration() {
