@@ -10,7 +10,7 @@ import './Home.css';
 export default function Gen() {
     const { id } = useParams();
 
-    const { search, typeFilter, registerPokemons } = usePokemon();
+    const { search, typeFilter } = usePokemon();
 
     const [pokemons, setPokemons] = useState<Pokemon[]>([]);
     
@@ -36,7 +36,6 @@ export default function Gen() {
             const results: Pokemon[] = await Promise.all(urls.map(fetchPokemon));
             const sorted = results.toSorted((a, b) => a.id - b.id);
             setPokemons(sorted);
-            registerPokemons(sorted);
         }
 
         fetchGen();
