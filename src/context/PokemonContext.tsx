@@ -68,6 +68,7 @@ export function PokemonProvider({ children }: { children: ReactNode }) {
 
   function clearFavorite(){
     setFavorites([]);
+    localStorage.removeItem("favorites");
   }
 
   function registerPokemons(list: Pokemon[]) {
