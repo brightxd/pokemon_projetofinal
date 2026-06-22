@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { usePokemon } from "../context/PokemonContext";
+import { usePokemon } from "../hooks/usePokemon";
 import PokemonCard from "../components/PokemonCard";
 import { Link } from "react-router-dom";
 import type { Pokemon } from "../types/pokemon";
